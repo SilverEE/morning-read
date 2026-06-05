@@ -182,11 +182,46 @@ def clean_html(text):
     return text
 
 
-def truncate(text, max_len=100):
+def truncate(text, max_len=200):
     """截取文本"""
     if len(text) <= max_len:
         return text
     return text[:max_len] + "..."
+
+
+def is_foreign_text(text):
+    """检测文本是否主要是外语（英文等）"""
+    if not text:
+        return False
+    # 统计英文字符占比
+    english_chars = sum(1 for c in text if c.isascii() and c.isalpha())
+    total_chars = sum(1 for c in text if c.isalpha())
+    if total_chars == 0:
+        return False
+    return english_chars / total_chars > 0.6
+
+
+def translate_text(text, source_lang="en", target_lang="zh"):
+    """翻译文本（使用 MyMemory 免费翻译 API）"""
+    if not text or not is_foreign_text(text):
+        return None
+    try:
+        url = "https://api.mymemory.translated.net/get"
+        params = {
+            "q": text[:500],  # API 限制单次 500 字符
+            "langpair": f"{source_lang}|{target_lang}"
+        }
+        resp = requests.get(url, params=params, timeout=10)
+        data = resp.json()
+        if data.get("responseStatus") == 200:
+            translated = data.get("responseData", {}).get("translatedText", "")
+            # 翻译质量检查：如果返回的和原文一样说明没翻译成功
+            if translated and translated.lower() != text.lower():
+                return translated
+        return None
+    except Exception as e:
+        print(f"翻译失败: {e}")
+        return None
 
 
 def fetch_news():
@@ -206,12 +241,25 @@ def fetch_news():
                 summary = clean_html(entry.get("summary", entry.get("description", "")))
                 if not title:
                     continue
-                news_list.append({
+                is_foreign = is_foreign_text(title)
+                item = {
                     "source": feed_info["name"],
                     "title": title,
                     "summary": truncate(summary),
-                    "link": entry.get("link", "")
-                })
+                    "link": entry.get("link", ""),
+                    "is_foreign": is_foreign
+                }
+                # 外语新闻自动翻译标题
+                if is_foreign:
+                    title_zh = translate_text(title)
+                    if title_zh:
+                        item["title_zh"] = title_zh
+                    # 摘要也翻译
+                    if summary:
+                        summary_zh = translate_text(summary[:300])
+                        if summary_zh:
+                            item["summary_zh"] = summary_zh
+                news_list.append(item)
                 count += 1
         except Exception as e:
             print(f"获取 {feed_info['name']} 失败: {e}")
@@ -222,14 +270,25 @@ def fetch_news():
 
 
 def format_news_markdown(news_list):
-    """格式化新闻为 Markdown"""
+    """格式化新闻为 Markdown（标题可点击，外语有翻译）"""
     if not news_list:
         return "📰 今日热点\n暂无新闻数据"
 
     lines = ["📰 今日热点\n"]
     for i, item in enumerate(news_list, 1):
-        lines.append(f"{i}. [{item['source']}] {item['title']}")
-        if item['summary']:
+        # 标题做成可点击链接
+        title = item['title']
+        if item['is_foreign'] and item.get('title_zh'):
+            # 外语新闻：显示中文翻译，原标题保留
+            title_display = f"{item['title_zh']}"
+            lines.append(f"{i}. [{item['source']}] [{title_display}]({item['link']})")
+            lines.append(f"   🌐 原文：{title}")
+        else:
+            lines.append(f"{i}. [{item['source']}] [{title}]({item['link']})")
+        # 摘要
+        if item['is_foreign'] and item.get('summary_zh'):
+            lines.append(f"   > {item['summary_zh']}")
+        elif item.get('summary'):
             lines.append(f"   > {item['summary']}")
     return "\n".join(lines)
 
@@ -333,7 +392,11 @@ def main():
 
     # 8. 组装推送内容
     today = datetime.now().strftime('%Y年%m月%d日')
-    title = f"晨间轻读 | {today}"
+    # 标题带上天气概况，聊天列表扫一眼就能看到
+    if weather:
+        title = f"{weather['icon']} 晨间轻读 | {weather['city']} {weather['current_temp']}°C {weather['desc']} | {today}"
+    else:
+        title = f"晨间轻读 | {today}"
     content = f"{weather_md}\n\n---\n\n{news_md}\n\n---\n\n{quote_md}\n\n---\n\n{song_md}"
 
     print("推送内容组装完成，正在发送...")
