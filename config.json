@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "location": "福州",
+  "push_time": "07:00",
+  "receivers": [
+    {"name": "我", "sct_key": "SCT359745TzFTOvTJfWSxTF7f00ghtgzSF"}
+  ]
+}

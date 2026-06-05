@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>晨间轻读</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #FAFAF8;
+  --card: #FFFFFF;
+  --text: #2D3436;
+  --text-secondary: #636E72;
+  --accent: #FF7675;
+  --accent-light: #FFF0F0;
+  --border: #F0F0EC;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  animation: fadeIn 0.5s ease;
+}
+
+.header-left h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.header-left .date {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.header-right .settings-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+}
+
+.header-right .settings-btn:hover {
+  transform: rotate(90deg);
+}
+
+/* Card */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 16px;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.25s; }
+.card:nth-child(4) { animation-delay: 0.35s; }
+
+.card-title {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-title .icon {
+  font-size: 15px;
+}
+
+/* Weather Card */
+.weather-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.weather-icon {
+  font-size: 40px;
+}
+
+.weather-info {
+  flex: 1;
+}
+
+.weather-city {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.weather-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.weather-temp {
+  font-size: 44px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.weather-temp span {
+  font-size: 20px;
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+.weather-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.weather-details .detail {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* News Card */
+.news-list {
+  list-style: none;
+}
+
+.news-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.news-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.news-item:first-child {
+  padding-top: 0;
+}
+
+.news-source {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-right: 6px;
+}
+
+.news-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.news-summary {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  line-height: 1.6;
+  display: none;
+}
+
+.news-item.expanded .news-summary {
+  display: block;
+}
+
+.news-item .arrow {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-left: 4px;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.news-item.expanded .arrow {
+  transform: rotate(90deg);
+}
+
+/* Quote Card */
+.quote-text {
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.8;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.quote-author {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.quote-author::before {
+  content: "—— ";
+}
+
+/* Song Card */
+.song-info {
+  font-size: 18px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.song-name {
+  color: var(--text);
+}
+
+.song-artist {
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+/* Settings Panel */
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 100;
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.settings-overlay.active {
+  display: block;
+}
+
+.settings-panel {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px 36px;
+  z-index: 101;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.settings-panel.active {
+  transform: translateY(0);
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.settings-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.settings-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: var(--border);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-group {
+  margin-bottom: 20px;
+}
+
+.settings-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Toggle Switch */
+.toggle {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  background: #DFE6E9;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.toggle.active {
+  background: var(--accent);
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.toggle.active::after {
+  transform: translateX(22px);
+}
+
+/* Input */
+.settings-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.settings-input:focus {
+  border-color: var(--accent);
+}
+
+.settings-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-input-row .settings-input {
+  flex: 1;
+}
+
+.btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn:active {
+  opacity: 0.7;
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: white;
+}
+
+.btn-secondary {
+  background: var(--border);
+  color: var(--text-secondary);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.settings-hint {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.settings-pat-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.pat-status {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.pat-status.connected {
+  background: #E8F8F5;
+  color: #00B894;
+}
+
+.pat-status.disconnected {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* Receiver List */
+.receiver-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: var(--bg);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.receiver-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.receiver-name {
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.receiver-key {
+  color: var(--text-secondary);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+}
+
+.receiver-remove {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.receiver-remove:hover {
+  background: var(--accent-light);
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.error-msg {
+  text-align: center;
+  padding: 16px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 12px 32px;
+  }
+  .card {
+    padding: 16px;
+  }
+  .weather-temp {
+    font-size: 36px;
+  }
+  .quote-text {
+    font-size: 15px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>晨间轻读</h1>
+      <div class="date" id="dateDisplay"></div>
+    </div>
+    <div class="header-right">
+      <button class="settings-btn" onclick="openSettings()" title="设置">⚙️</button>
+    </div>
+  </div>
+
+  <!-- Weather Card -->
+  <div class="card" id="weatherCard">
+    <div class="card-title"><span class="icon">🌤</span> 天气</div>
+    <div id="weatherContent">
+      <div class="loading">加载中</div>
+    </div>
+  </div>
+
+  <!-- News Card -->
+  <div class="card" id="newsCard">
+    <div class="card-title"><span class="icon">📰</span> 今日热点</div>
+    <div id="newsContent">
+      <div class="loading">加载中</div>
+    </div>
+  </div>
+
+  <!-- Quote Card -->
+  <div class="card" id="quoteCard">
+    <div class="card-title"><span class="icon">💡</span> 每日一言</div>
+    <div id="quoteContent">
+      <div class="loading">加载中</div>
+    </div>
+  </div>
+
+  <!-- Song Card -->
+  <div class="card" id="songCard">
+    <div class="card-title"><span class="icon">🎵</span> 今日推荐</div>
+    <div id="songContent">
+      <div class="loading">加载中</div>
+    </div>
+  </div>
+
+  <div class="footer">晨间轻读 · 每日早上7点准时推送</div>
+</div>
+
+<!-- Settings Overlay -->
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+
+<!-- Settings Panel -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="settings-header">
+    <h2>设置</h2>
+    <button class="settings-close" onclick="closeSettings()">✕</button>
+  </div>
+
+  <!-- Push Toggle -->
+  <div class="settings-group">
+    <div class="settings-row">
+      <span class="settings-label" style="margin-bottom:0">每日推送</span>
+      <div class="toggle" id="pushToggle" onclick="togglePush()"></div>
+    </div>
+    <div class="settings-hint">开启后每日早上7点自动推送到微信</div>
+  </div>
+
+  <!-- Location -->
+  <div class="settings-group">
+    <div class="settings-label">所在城市</div>
+    <div class="settings-input-row">
+      <input type="text" class="settings-input" id="locationInput" placeholder="输入城市名" value="福州">
+      <button class="btn btn-secondary" onclick="autoLocate()">📍定位</button>
+    </div>
+    <div class="settings-hint">输入城市名或点击定位按钮自动获取</div>
+  </div>
+
+  <!-- Push Time -->
+  <div class="settings-group">
+    <div class="settings-label">推送时间</div>
+    <input type="text" class="settings-input" value="07:00" readonly style="background:#F0F0EC;cursor:not-allowed">
+    <div class="settings-hint">推送时间需在 GitHub 仓库中修改 cron 表达式</div>
+  </div>
+
+  <!-- Receivers Section -->
+  <div class="settings-group">
+    <div class="settings-label">推送接收人</div>
+    <div id="receiversList"></div>
+    <div class="settings-hint" style="margin:8px 0">每个接收人需在 Server酱 注册获取自己的 Key</div>
+    <div class="settings-input-row" style="gap:6px">
+      <input type="text" class="settings-input" id="newReceiverName" placeholder="备注名" style="flex:2">
+      <input type="text" class="settings-input" id="newReceiverKey" placeholder="Server酱 Key" style="flex:4">
+      <button class="btn btn-accent" onclick="addReceiver()" style="white-space:nowrap">添加</button>
+    </div>
+  </div>
+
+  <!-- PAT Section -->
+  <div class="settings-pat-section">
+    <div class="settings-label">GitHub 同步</div>
+    <div id="patStatus" class="pat-status disconnected">未连接 GitHub</div>
+    <input type="password" class="settings-input" id="patInput" placeholder="输入 GitHub Personal Access Token" style="margin-bottom:8px">
+    <div class="settings-hint" style="margin-bottom:8px">
+      Fine-grained PAT，仅需 <code>contents:write</code> 权限，用于同步推送开关和城市设置到仓库 config.json
+    </div>
+    <button class="btn btn-accent" onclick="savePAT()" style="margin-right:8px">保存 Token</button>
+    <button class="btn btn-outline" onclick="testConnection()">测试连接</button>
+  </div>
+</div>
+
+<script>
+// ============ Date Display ============
+(function() {
+  const now = new Date();
+  const days = ['日','一','二','三','四','五','六'];
+  const m = now.getMonth() + 1;
+  const d = now.getDate();
+  document.getElementById('dateDisplay').textContent = m + '月' + d + '日 星期' + days[now.getDay()];
+})();
+
+// ============ Inline Data ============
+const QUOTES = [
+  {"text":"世界上只有一种真正的英雄主义，那就是在认清生活的真相后依然热爱生活。","author":"罗曼·罗兰"},
+  {"text":"未经审视的人生不值得过。","author":"苏格拉底"},
+  {"text":"人不是因为没有信念而失败，而是因为不能把信念化成行动，并且坚持到底。","author":"戴尔·卡耐基"},
+  {"text":"活着的意义在于体验生命的过程，而非抵达某个终点。","author":"周国平"},
+  {"text":"我思故我在。","author":"笛卡尔"},
+  {"text":"知人者智，自知者明。胜人者有力，自胜者强。","author":"老子"},
+  {"text":"人生天地之间，若白驹之过隙，忽然而已。","author":"庄子"},
+  {"text":"无穷的远方，无数的人们，都与我有关。","author":"鲁迅"},
+  {"text":"真正的勇气不是没有恐惧，而是在恐惧面前依然前行。","author":"纳尔逊·曼德拉"},
+  {"text":"一个人知道自己为什么而活，就可以忍受任何一种生活。","author":"尼采"},
+  {"text":"温柔半两，从容一生。","author":"三毛"},
+  {"text":"万物皆有裂痕，那是光照进来的地方。","author":"莱昂纳德·科恩"},
+  {"text":"教育不是注满一桶水，而是点燃一把火。","author":"叶芝"},
+  {"text":"每一个不曾起舞的日子，都是对生命的辜负。","author":"尼采"},
+  {"text":"生如夏花之绚烂，死如秋叶之静美。","author":"泰戈尔"},
+  {"text":"要有最朴素的生活和最遥远的梦想，即使明天天寒地冻，路远马亡。","author":"海子"},
+  {"text":"生活不可能像你想象得那么好，但也不会像你想象得那么糟。","author":"莫泊桑"},
+  {"text":"所谓无底深渊，下去也是前程万里。","author":"木心"},
+  {"text":"星星发亮是为了让每一个人有一天都能找到属于自己的星星。","author":"圣埃克苏佩里"},
+  {"text":"人间有味是清欢。","author":"苏轼"}
+];
+
+const SONGS = [
+  {"name":"月亮代表我的心","artist":"邓丽君"},
+  {"name":"晴天","artist":"周杰伦"},
+  {"name":"Bohemian Rhapsody","artist":"Queen"},
+  {"name":"消愁","artist":"毛不易"},
+  {"name":"Hotel California","artist":"Eagles"},
+  {"name":"平凡之路","artist":"朴树"},
+  {"name":"Yesterday","artist":"The Beatles"},
+  {"name":"南山南","artist":"马頔"},
+  {"name":"Imagine","artist":"John Lennon"},
+  {"name":"成都","artist":"赵雷"},
+  {"name":"Stairway to Heaven","artist":"Led Zeppelin"},
+  {"name":"光年之外","artist":"邓紫棋"},
+  {"name":"Someone Like You","artist":"Adele"},
+  {"name":"海阔天空","artist":"Beyond"},
+  {"name":"起风了","artist":"买辣椒也用券"},
+  {"name":"后来","artist":"刘若英"},
+  {"name":"天黑黑","artist":"孙燕姿"},
+  {"name":"稻香","artist":"周杰伦"},
+  {"name":"安河桥","artist":"宋冬野"},
+  {"name":"童年","artist":"罗大佑"}
+];
+
+// ============ Weather ============
+const WEATHER_CODE_MAP = {
+  0:"晴",1:"大部晴",2:"多云",3:"阴天",
+  45:"雾",48:"雾凇",
+  51:"小毛毛雨",53:"毛毛雨",55:"大毛毛雨",
+  56:"冻毛毛雨",57:"大冻毛毛雨",
+  61:"小雨",63:"中雨",65:"大雨",
+  66:"冻雨",67:"大冻雨",
+  71:"小雪",73:"中雪",75:"大雪",77:"雪粒",
+  80:"小阵雨",81:"中阵雨",82:"大阵雨",
+  85:"小阵雪",86:"大阵雪",
+  95:"雷暴",96:"雷暴伴冰雹",99:"强雷暴伴冰雹"
+};
+
+const WEATHER_ICON_MAP = {
+  0:"☀️",1:"🌤",2:"⛅",3:"☁️",
+  45:"🌫",48:"🌫",
+  51:"🌦",53:"🌦",55:"🌧",
+  56:"🌧",57:"🌧",
+  61:"🌧",63:"🌧",65:"🌧",
+  66:"🌧",67:"🌧",
+  71:"🌨",73:"🌨",75:"❄️",77:"🌨",
+  80:"🌦",81:"🌧",82:"⛈",
+  85:"🌨",86:"❄️",
+  95:"⛈",96:"⛈",99:"⛈"
+};
+
+let currentLocation = localStorage.getItem('morning_read_location') || '福州';
+
+async function fetchWeather(location) {
+  try {
+    const geoUrl = 'https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(location) + '&count=1&language=zh';
+    const geoResp = await fetchWithTimeout(geoUrl, 8000);
+    const geoData = await geoResp.json();
+    if (!geoData.results || !geoData.results.length) {
+      throw new Error('未找到城市');
+    }
+    const r = geoData.results[0];
+    const cityName = r.name || location;
+    const lat = r.latitude;
+    const lon = r.longitude;
+
+    const weatherUrl = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon +
+      '&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode' +
+      '&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code&timezone=Asia/Shanghai';
+    const wResp = await fetchWithTimeout(weatherUrl, 10000);
+    const wData = await wResp.json();
+
+    const cur = wData.current || {};
+    const day = wData.daily || {};
+    const code = cur.weather_code || 0;
+    const desc = WEATHER_CODE_MAP[code] || '未知';
+    const icon = WEATHER_ICON_MAP[code] || '🌤';
+
+    const html =
+      '<div class="weather-main">' +
+        '<div class="weather-icon">' + icon + '</div>' +
+        '<div class="weather-info">' +
+          '<div class="weather-city">' + cityName + '</div>' +
+          '<div class="weather-desc">' + desc + '</div>' +
+        '</div>' +
+        '<div class="weather-temp">' + (cur.temperature_2m || '--') + '<span>°C</span></div>' +
+      '</div>' +
+      '<div class="weather-details">' +
+        '<div class="detail">🌡 ' + (day.temperature_2m_min ? day.temperature_2m_min[0] : '--') + '° ~ ' + (day.temperature_2m_max ? day.temperature_2m_max[0] : '--') + '°</div>' +
+        '<div class="detail">🤒 体感 ' + (cur.apparent_temperature || '--') + '°C</div>' +
+        '<div class="detail">💧 湿度 ' + (cur.relative_humidity_2m || '--') + '%</div>' +
+        '<div class="detail">🌧 降雨 ' + (day.precipitation_probability_max ? day.precipitation_probability_max[0] : '--') + '%</div>' +
+      '</div>';
+
+    document.getElementById('weatherContent').innerHTML = html;
+  } catch(e) {
+    console.error('天气获取失败:', e);
+    document.getElementById('weatherContent').innerHTML =
+      '<div class="error-msg">天气数据暂不可用</div>';
+  }
+}
+
+// ============ News ============
+const RSS_FEEDS = [
+  {name:'36氪', url:'https://36kr.com/feed'},
+  {name:'机器之心', url:'https://www.jiqizhixin.com/rss'},
+  {name:'Hacker News', url:'https://hnrss.org/frontpage'},
+  {name:'TechCrunch', url:'https://techcrunch.com/feed/'}
+];
+
+async function fetchNews() {
+  try {
+    const allNews = [];
+    const promises = RSS_FEEDS.map(async function(feed) {
+      try {
+        const proxyUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url);
+        const resp = await fetchWithTimeout(proxyUrl, 10000);
+        const data = await resp.json();
+        if (data.status === 'ok' && data.items) {
+          const items = data.items.slice(0, 3);
+          items.forEach(function(item) {
+            allNews.push({
+              source: feed.name,
+              title: item.title || '',
+              summary: stripHtml(item.description || '').substring(0, 100),
+              link: item.link || ''
+            });
+          });
+        }
+      } catch(e) {
+        console.error('获取 ' + feed.name + ' 失败:', e);
+      }
+    });
+
+    await Promise.all(promises);
+
+    const news = allNews.slice(0, 8);
+
+    if (!news.length) {
+      document.getElementById('newsContent').innerHTML =
+        '<div class="error-msg">暂无新闻数据</div>';
+      return;
+    }
+
+    let html = '<ul class="news-list">';
+    news.forEach(function(item, i) {
+      html += '<li class="news-item" onclick="toggleNews(this)">' +
+        '<span class="news-source">[' + item.source + ']</span>' +
+        '<span class="news-title">' + escapeHtml(item.title) + '</span>' +
+        '<span class="arrow">▶</span>' +
+        (item.summary ? '<div class="news-summary">' + escapeHtml(item.summary) + '</div>' : '') +
+      '</li>';
+    });
+    html += '</ul>';
+
+    document.getElementById('newsContent').innerHTML = html;
+  } catch(e) {
+    console.error('新闻获取失败:', e);
+    document.getElementById('newsContent').innerHTML =
+      '<div class="error-msg">新闻数据暂不可用</div>';
+  }
+}
+
+function toggleNews(el) {
+  el.classList.toggle('expanded');
+}
+
+// ============ Quote & Song ============
+function showQuote() {
+  const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
+  document.getElementById('quoteContent').innerHTML =
+    '<div class="quote-text">' + escapeHtml(q.text) + '</div>' +
+    '<div class="quote-author">' + escapeHtml(q.author) + '</div>';
+}
+
+function showSong() {
+  const s = SONGS[Math.floor(Math.random() * SONGS.length)];
+  document.getElementById('songContent').innerHTML =
+    '<div class="song-info">' +
+      '<span class="song-name">《' + escapeHtml(s.name) + '》</span>' +
+      '<span class="song-artist">- ' + escapeHtml(s.artist) + '</span>' +
+    '</div>';
+}
+
+// ============ Settings ============
+function openSettings() {
+  document.getElementById('settingsOverlay').classList.add('active');
+  document.getElementById('settingsPanel').classList.add('active');
+  loadSettingsUI();
+}
+
+function closeSettings() {
+  document.getElementById('settingsOverlay').classList.remove('active');
+  document.getElementById('settingsPanel').classList.remove('active');
+}
+
+function loadSettingsUI() {
+  const pat = localStorage.getItem('morning_read_pat');
+  const loc = localStorage.getItem('morning_read_location') || '福州';
+  document.getElementById('locationInput').value = loc;
+
+  if (pat) {
+    document.getElementById('patStatus').className = 'pat-status connected';
+    document.getElementById('patStatus').textContent = '✓ GitHub 已连接';
+    document.getElementById('patInput').placeholder = '已保存，重新输入可更新';
+  } else {
+    document.getElementById('patStatus').className = 'pat-status disconnected';
+    document.getElementById('patStatus').textContent = '未连接 GitHub';
+  }
+
+  loadPushState();
+  loadReceiversUI();
+}
+
+async function loadPushState() {
+  const pat = localStorage.getItem('morning_read_pat');
+  const toggle = document.getElementById('pushToggle');
+  if (!pat) {
+    toggle.classList.remove('active');
+    return;
+  }
+  try {
+    const config = await readConfigFromGitHub(pat);
+    if (config) {
+      if (config.enabled) {
+        toggle.classList.add('active');
+      } else {
+        toggle.classList.remove('active');
+      }
+    }
+  } catch(e) {
+    // ignore
+  }
+}
+
+async function togglePush() {
+  const pat = localStorage.getItem('morning_read_pat');
+  const toggle = document.getElementById('pushToggle');
+  if (!pat) {
+    alert('请先配置 GitHub Personal Access Token 以同步设置');
+    return;
+  }
+  const newState = !toggle.classList.contains('active');
+  try {
+    const config = await readConfigFromGitHub(pat);
+    if (config) {
+      config.enabled = newState;
+      const ok = await writeConfigToGitHub(pat, config);
+      if (ok) {
+        if (newState) {
+          toggle.classList.add('active');
+        } else {
+          toggle.classList.remove('active');
+        }
+      }
+    }
+  } catch(e) {
+    alert('同步失败: ' + e.message);
+  }
+}
+
+function autoLocate() {
+  if (!navigator.geolocation) {
+    alert('浏览器不支持定位功能');
+    return;
+  }
+  const btn = event.target;
+  btn.textContent = '定位中...';
+  btn.disabled = true;
+
+  navigator.geolocation.getCurrentPosition(async function(pos) {
+    try {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      const url = 'https://geocoding-api.open-meteo.com/v1/search?name=&count=1&language=zh';
+      // Use reverse geocoding approximation via nearby city search
+      // Open-Meteo doesn't have reverse geocoding, so we use nominatim
+      const revUrl = 'https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lon + '&format=json&accept-language=zh';
+      const resp = await fetchWithTimeout(revUrl, 8000);
+      const data = await resp.json();
+      let city = data.address && (data.address.city || data.address.town || data.address.county || data.address.state);
+      if (city) {
+        // Remove "市" suffix for cleaner display
+        city = city.replace(/市$/, '');
+        document.getElementById('locationInput').value = city;
+        localStorage.setItem('morning_read_location', city);
+        currentLocation = city;
+        fetchWeather(city);
+      }
+    } catch(e) {
+      alert('获取城市名失败: ' + e.message);
+    } finally {
+      btn.textContent = '📍定位';
+      btn.disabled = false;
+    }
+  }, function(err) {
+    alert('定位失败: ' + err.message);
+    btn.textContent = '📍定位';
+    btn.disabled = false;
+  }, { timeout: 10000 });
+}
+
+function savePAT() {
+  const pat = document.getElementById('patInput').value.trim();
+  if (!pat) {
+    alert('请输入 Token');
+    return;
+  }
+  localStorage.setItem('morning_read_pat', pat);
+  document.getElementById('patStatus').className = 'pat-status connected';
+  document.getElementById('patStatus').textContent = '✓ GitHub 已连接';
+  document.getElementById('patInput').value = '';
+  document.getElementById('patInput').placeholder = '已保存，重新输入可更新';
+  loadPushState();
+}
+
+async function testConnection() {
+  const pat = localStorage.getItem('morning_read_pat');
+  if (!pat) {
+    alert('请先保存 Token');
+    return;
+  }
+  try {
+    const config = await readConfigFromGitHub(pat);
+    if (config) {
+      alert('连接成功！当前配置: ' + JSON.stringify(config));
+    } else {
+      alert('连接失败：无法读取 config.json');
+    }
+  } catch(e) {
+    alert('连接失败: ' + e.message);
+  }
+}
+
+// ============ Receivers Management ============
+let cachedReceivers = [];
+
+async function loadReceiversUI() {
+  const pat = localStorage.getItem('morning_read_pat');
+  const container = document.getElementById('receiversList');
+
+  if (!pat) {
+    container.innerHTML = '<div style="font-size:12px;color:var(--text-secondary);padding:4px 0">连接 GitHub 后可管理接收人</div>';
+    return;
+  }
+
+  try {
+    const config = await readConfigFromGitHub(pat);
+    if (config && config.receivers) {
+      cachedReceivers = config.receivers;
+    } else if (config && config.sct_key) {
+      // 兼容旧版单 key 配置
+      cachedReceivers = [{"name": "默认", "sct_key": config.sct_key}];
+    } else {
+      cachedReceivers = [];
+    }
+  } catch(e) {
+    // 如果 GitHub 读取失败，尝试从本地缓存
+    const local = localStorage.getItem('morning_read_receivers');
+    cachedReceivers = local ? JSON.parse(local) : [];
+  }
+
+  renderReceivers();
+}
+
+function renderReceivers() {
+  const container = document.getElementById('receiversList');
+  if (!cachedReceivers.length) {
+    container.innerHTML = '<div style="font-size:12px;color:var(--text-secondary);padding:4px 0">暂无接收人，请在下方添加</div>';
+    return;
+  }
+
+  let html = '';
+  cachedReceivers.forEach(function(r, i) {
+    const maskedKey = r.sct_key ? r.sct_key.substring(0, 8) + '****' : '空';
+    html += '<div class="receiver-item">' +
+      '<div class="receiver-info">' +
+        '<span class="receiver-name">' + escapeHtml(r.name || '未命名') + '</span>' +
+        '<span class="receiver-key">' + maskedKey + '</span>' +
+      '</div>' +
+      '<button class="receiver-remove" onclick="removeReceiver(' + i + ')" title="移除">✕</button>' +
+    '</div>';
+  });
+  container.innerHTML = html;
+}
+
+async function addReceiver() {
+  const nameInput = document.getElementById('newReceiverName');
+  const keyInput = document.getElementById('newReceiverKey');
+  const name = nameInput.value.trim() || '接收人';
+  const sct_key = keyInput.value.trim();
+
+  if (!sct_key) {
+    alert('请输入 Server酱 Key');
+    return;
+  }
+
+  // 检查重复
+  if (cachedReceivers.some(function(r) { return r.sct_key === sct_key; })) {
+    alert('该 Key 已存在');
+    return;
+  }
+
+  cachedReceivers.push({"name": name, "sct_key": sct_key});
+
+  // 保存到 GitHub
+  const pat = localStorage.getItem('morning_read_pat');
+  if (pat) {
+    try {
+      const config = await readConfigFromGitHub(pat);
+      if (config) {
+        config.receivers = cachedReceivers;
+        delete config.sct_key; // 清理旧版字段
+        const ok = await writeConfigToGitHub(pat, config);
+        if (!ok) {
+          alert('同步到 GitHub 失败，请重试');
+          cachedReceivers.pop();
+          return;
+        }
+      }
+    } catch(e) {
+      alert('同步失败: ' + e.message);
+      cachedReceivers.pop();
+      return;
+    }
+  }
+
+  // 本地缓存
+  localStorage.setItem('morning_read_receivers', JSON.stringify(cachedReceivers));
+
+  renderReceivers();
+  nameInput.value = '';
+  keyInput.value = '';
+}
+
+async function removeReceiver(index) {
+  const r = cachedReceivers[index];
+  if (!confirm('确定移除 ' + (r.name || '未命名') + '？')) return;
+
+  const removed = cachedReceivers.splice(index, 1)[0];
+
+  const pat = localStorage.getItem('morning_read_pat');
+  if (pat) {
+    try {
+      const config = await readConfigFromGitHub(pat);
+      if (config) {
+        config.receivers = cachedReceivers;
+        delete config.sct_key;
+        const ok = await writeConfigToGitHub(pat, config);
+        if (!ok) {
+          cachedReceivers.splice(index, 0, removed);
+          alert('同步到 GitHub 失败，请重试');
+          return;
+        }
+      }
+    } catch(e) {
+      cachedReceivers.splice(index, 0, removed);
+      alert('同步失败: ' + e.message);
+      return;
+    }
+  }
+
+  localStorage.setItem('morning_read_receivers', JSON.stringify(cachedReceivers));
+  renderReceivers();
+}
+
+// Save location on change
+document.getElementById('locationInput').addEventListener('change', function() {
+  const val = this.value.trim();
+  if (val) {
+    localStorage.setItem('morning_read_location', val);
+    currentLocation = val;
+    fetchWeather(val);
+    // Try sync to GitHub
+    syncLocationToGitHub(val);
+  }
+});
+
+async function syncLocationToGitHub(location) {
+  const pat = localStorage.getItem('morning_read_pat');
+  if (!pat) return;
+  try {
+    const config = await readConfigFromGitHub(pat);
+    if (config) {
+      config.location = location;
+      await writeConfigToGitHub(pat, config);
+    }
+  } catch(e) {
+    console.error('同步位置失败:', e);
+  }
+}
+
+// ============ GitHub API ============
+const GITHUB_REPO = 'Silveree/morning-read';
+
+async function readConfigFromGitHub(pat) {
+  const url = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/config.json';
+  const resp = await fetch(url, {
+    headers: { 'Authorization': 'token ' + pat, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (!resp.ok) throw new Error('读取失败: ' + resp.status);
+  const data = await resp.json();
+  const content = atob(data.content);
+  const config = JSON.parse(content);
+  config._sha = data.sha;
+  return config;
+}
+
+async function writeConfigToGitHub(pat, config) {
+  const sha = config._sha;
+  delete config._sha;
+  const url = 'https://api.github.com/repos/' + GITHUB_REPO + '/contents/config.json';
+  const body = {
+    message: '更新晨间轻读配置',
+    content: btoa(unescape(encodeURIComponent(JSON.stringify(config, null, 2)))),
+    sha: sha
+  };
+  const resp = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Authorization': 'token ' + pat, 'Accept': 'application/vnd.github.v3+json' },
+    body: JSON.stringify(body)
+  });
+  return resp.ok;
+}
+
+// ============ Utilities ============
+function fetchWithTimeout(url, timeout) {
+  return Promise.race([
+    fetch(url),
+    new Promise(function(_, reject) {
+      setTimeout(function() { reject(new Error('请求超时')); }, timeout);
+    })
+  ]);
+}
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(text));
+  return div.innerHTML;
+}
+
+// ============ Init ============
+(function init() {
+  fetchWeather(currentLocation);
+  fetchNews();
+  showQuote();
+  showSong();
+})();
+</script>
+</body>
+</html>
