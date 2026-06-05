@@ -326,9 +326,21 @@ def get_random_song():
         return {"name": "清晨", "artist": "未知"}
 
 
+def generate_music_link(song):
+    """生成音乐搜索链接（网易云音乐）"""
+    from urllib.parse import quote
+    keyword = f"{song['name']} {song['artist']}"
+    return f"https://music.163.com/#/search/m/?s={quote(keyword)}"
+
+
 def format_song_markdown(song):
-    """格式化歌曲为 Markdown"""
-    return f"🎵 今日推荐\n\n《{song['name']}》 - {song['artist']}"
+    """格式化歌曲为 Markdown（标题可点击跳转网易云）"""
+    music_link = generate_music_link(song)
+    return (
+        f"🎵 今日推荐\n\n"
+        f"[《{song['name']}》 - {song['artist']}]({music_link})\n\n"
+        f"👆 点击即可搜索播放"
+    )
 
 
 # ============ 推送 ============
